@@ -1,19 +1,4 @@
 
-===================================
-
-===================================
-
-create table service_master(service_code varchar(5) PRIMARY KEY,service_name varchar(15),amount decimal(7,2));
-
-insert into service_master values('SC001','CHILDECARE',400.00),('SC002','NURSING',300.00),('SC003','WHEELCHAIR',350.00);
-=====================================
-create table Flight_services(FID varchar(5),service_code varchar(5),FOREIGN KEY(FID) REFERENCES FLIGHT(FID),FOREIGN KEY(SERVICE_CODE) REFERENCES SERVICE_MASTER(SERVICE_CODE))
-
-===================================
-++++++++++++++++++++++++++++++++++++++++++++
-+++++++++++++++++++++++++++++++++++++++++++++
-FLY SAFE AIRWARYS :
---------------------
 create table Flight(Fid varchar(6) PRIMARY KEY,FName varchar(20),Source_code varchar(5),Destination_code varchar(5),Journey_hours int(2));
 
 insert into Flight values
