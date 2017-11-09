@@ -1,0 +1,207 @@
+create database Bank_Db;
+
+use Bank_Db;
+
+Create TABLE Bank(
+B_Id INT(4),
+Bank_Name VARCHAR(25),
+Address VARCHAR(100),PRIMARY KEY(B_ID));
+
+Create TABLE branch(
+B_Id INT(4),
+Branch_Number INT(4),
+Bank_Name VARCHAR(25),
+Address VARCHAR(100),
+PRIMARY KEY(Branch_Number),
+FOREIGN KEY(B_Id) REFERENCES Bank(B_ID));
+
+Create TABLE Loan(
+B_Id INT(4),
+Loan_Number VARCHAR(4),
+Type VARCHAR(25),
+PRIMARY KEY(Loan_Number),
+FOREIGN KEY(B_ID) REFERENCES Bank(b_id));
+
+Create TABLE Customer(
+C_ID INT(3),
+Customer_Name VARCHAR(25),
+Phone_Number INT(10),
+Address VARCHAR(100),
+PRIMARY KEY(C_ID));
+
+Create TABLE Account_Type(
+C_ID INT(3),
+Account_Number INT(8),
+Account_Type VARCHAR(25),
+PRIMARY KEY(Account_Number),
+FOREIGN KEY(C_ID) REFERENCES Customer(C_ID));
+
+Create TABLE Loan_Offering(
+B_ID INT(6),
+Branch_Number INT(4),
+Loan_Number VARCHAR(4),
+FOREIGN KEY(B_ID) REFERENCES Bank(b_id),
+FOREIGN KEY(Branch_Number) REFERENCES Branch(Branch_Number),
+FOREIGN KEY(Loan_Number) REFERENCES Loan(Loan_Number));
+
+Create TABLE Branch_Account_Details(
+Account_Number INT(8),
+B_ID INT(6),
+Branch_Number INT(4),
+FOREIGN KEY(Account_Number) REFERENCES Account_Type(Account_Number),
+FOREIGN KEY(B_ID) REFERENCES Bank(b_id),
+FOREIGN KEY(Branch_Number) REFERENCES Branch(Branch_Number));
+
+Create TABLE Loan_Details(
+Loan_Number VARCHAR(4),
+C_ID INT(3),
+Loan_Issued_Date DATE,
+Intrest_Rate FLOAT(4,2),
+Amount INT(6),
+Duration VARCHAR(25),
+FOREIGN KEY(Loan_Number) REFERENCES Loan(Loan_Number),
+FOREIGN KEY(C_ID) REFERENCES Customer(C_ID));
+
+
+Create TABLE Account_Details(
+Account_Number INT(8),
+Customer_Number INT(3),
+Date_Of_OpeningAccount DATE,
+FOREIGN KEY(Account_Number) REFERENCES Account_Type(Account_Number),
+FOREIGN KEY(Customer_Number) REFERENCES Customer(C_ID));
+
+insert into Bank values
+(421313,'SBI','Hyderabad'),
+(421327,'Andhra Bank','Bangalore'),
+(438142,'ICICI BANK PVT LTD','Indore');
+
+insert into Branch values
+(421313,1001,'SBI Gachibowli','Gachibowli'),
+(421313,1002,'SBI Uppal','Uppal'),
+(421327,1003,'Andhra bank Mavali','Mavali'),
+(421327,1004,'Andhrabank Ibulpark','Ibulpark'),
+(438142,1005,'ICICI Transport nagar','Transport Nagar'),
+(438142,1006,'ICICI  Palai','Palai');
+
+insert into Loan values
+(438142,'A101','CAR'),
+(421327,'A102','Business'),
+(421313,'A103','Home'),
+(421313,'A104','Car'),
+(421313,'A105','Study'),
+(438142,'A106','Car');
+
+insert into Customer values
+(101,'Robin',9912200120,'Mavali'),
+(102,'Harry',7799183543,'Palai'),
+(103,'Potter',7788121234,'Gachibowli'),
+(104,'Alina',8877665431,'Ibul Park'),
+(105,'Karina',9848123451,'Transport Nagar'),
+(106,'Ketharin',9911223451,'Uppal');
+
+insert into Account_type values
+(101,12323001,'Business'),
+(103,87323002,'Normal'),
+(104,65323003,'Student'),
+(105,42323004,'Normal');
+
+
+insert into Loan_Offering values
+(421313,1001,'A101'),
+(421313,1002,'A102'),
+(438142,1005,'A103'),
+(438142,1004,'A104'),
+(438142,1006,'A105'),
+(421327,1003,'A106');
+
+
+insert into Branch_Account_Details values
+(12323001,421313,1001),
+(87323002,421313,1002),
+(65323003,438142,1005),
+(42323004,421327,1003);
+
+insert into Loan_Details values
+('A101',101,'2013-10-20',8,100000,'5 years'),
+('A102',102,'2013-5-20',10.5,1000000,'10 years'),
+('A103',104,'2012-12-20',12,12000000,'15 years'),
+('A104',105,'2012-11-10',5,10000,'One month');
+
+insert into Account_Details values
+(12323001,101,'2011-01-12'),
+(87323002,103,'2006-03-16'),
+(65323003,104,'2012-11-28'),
+(42323004,105,'2009-12-22');
+
+
+select b.*,br.Branch_Number,br.Address from Branch br,Bank b
+where
+b.B_Id=br.B_Id and
+br.Address='Transport Nagar';
+
+select Address from Customer where C_Id in
+(select ld.C_Id from Loan_Details ld,Loan l1,Loan l2 where 
+ld.Loan_Number=l1.Loan_Number and ld.Loan_Number=l2.Loan_Number and
+l1.Type='Home' and l2.Type='Car');
+
+select Address from Customer where C_Id in
+(Select C_ID from Loan_Details where 
+Intrest_rate=10.5);
+
+select Bank_Name as Branch_Name from Branch
+where B_Id in
+(select B_Id from Loan where Loan_Number in
+(select Loan_Number from Loan_Details where
+Amount=1000000));
+
+select Phone_Number from Customer where C_Id in
+(select C_Id from Account_Type where Account_Number in
+(select Account_Number from Account_Details where
+Date_Of_OpeningAccount between '2010-10-10' and '2013-12-28'));
+
+select Customer_Name from Customer where C_Id in
+(select C_Id from Loan_Details where
+Loan_Issued_date between '2012-10-01' and '2013-11-01');
+
+select b.*,Max(ld.Amount) from Bank b,Loan l,Loan_Details ld 
+where b.B_id=l.B_id and l.Loan_Number=ld.Loan_Number group by b.B_ID; 
+
+select Customer_Name from Customer where C_Id in
+(select C_Id from Loan_details where Intrest_Rate=(
+select Min(Intrest_Rate) from Loan_Details where Loan_Issued_Date>'2012-12-12'));
+
+select Bank_Name from Bank where B_Id in
+(select B_Id from Loan_Offering where Loan_Number in
+(select Loan_Number from Loan_details)group by B_ID having Count(B_Id)>=2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
