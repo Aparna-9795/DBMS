@@ -1,5 +1,10 @@
 
-create table Flight(Fid varchar(6) PRIMARY KEY,FName varchar(20),Source_code varchar(5),Destination_code varchar(5),Journey_hours int(2));
+create database Flight_Details;
+
+use Flight_Details;
+
+create table Flight(Fid varchar(6) PRIMARY KEY,FName varchar(20),
+Source_code varchar(5),Destination_code varchar(5),Journey_hours int(2));
 
 insert into Flight values
 ('FSA01','HYD-DEL','CC001','CC003',6),
@@ -10,7 +15,7 @@ insert into Flight values
 ('FSA06','LAS-DEL','CC004','CC003',12),
 ('FSA07','DEL-CFA','CC003','CC005',13),
 ('FSA08','CFA-DEL','CC005','CC003',13);
-===========================================
+
 create table City_Master(
 City_Code Varchar(5) PRIMARY KEY,
 City_Name varchar(20),
@@ -21,40 +26,40 @@ insert into city_master values('CC001','HYDERABAD','INDIA'),
 ('CC003','DELHI','INDIA'),
 ('CC004','LOS ANGELES','USA'),
 ('CC005','CALIFORNIA','ENGLAND');
-========================================
+
 create table Flight_class
 (FID varchar(6),
 class varchar(10),
 amount decimal(10,2),
 no_seats int(2),
-FOREIGN KEY(FID) REFERENCES flight(FID));
+FOREIGN KEY(FID) REFERENCES flight(FID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into flight_class values
-('FSA001','EXECUTIVE',7000,3),
-('FSA001','BUSINESS',6000,4),
-('FSA001','ECONOMY',5000,5),
-('FSA002','EXECUTIVE',7000,3),
-('FSA002','BUSINESS',6000,4),
-('FSA002','ECONOMY',5000,5),
-('FSA003','EXECUTIVE',8000,4),
-('FSA003','BUSINESS',7000,5),
-('FSA003','ECONOMY',6000,6),
-('FSA004','EXECUTIVE',8000,4),
-('FSA004','BUSINESS',7000,5),
-('FSA004','ECONOMY',6000,6),
-('FSA005','EXECUTIVE',10000,5),
-('FSA005','BUSINESS',9000,6),
-('FSA005','ECONOMY',8000,7),
-('FSA006','EXECUTIVE',10000,5),
-('FSA006','BUSINESS',9000,6),
-('FSA006','ECONOMY','8000',7),
-('FSA007','EXECUTIVE',12000,6),
-('FSA007','BUSINESS',11000,7),
-('FSA007','ECONOMY',10000,8),
-('FSA008','EXECUTIVE',12000,6),
-('FSA008','BUSINESS',11000,7),
-('FSA008','ECONOMY',10000,8);
-========================================
+('FSA01','EXECUTIVE',7000,3),
+('FSA01','BUSINESS',6000,4),
+('FSA01','ECONOMY',5000,5),
+('FSA02','EXECUTIVE',7000,3),
+('FSA02','BUSINESS',6000,4),
+('FSA02','ECONOMY',5000,5),
+('FSA03','EXECUTIVE',8000,4),
+('FSA03','BUSINESS',7000,5),
+('FSA03','ECONOMY',6000,6),
+('FSA04','EXECUTIVE',8000,4),
+('FSA04','BUSINESS',7000,5),
+('FSA04','ECONOMY',6000,6),
+('FSA05','EXECUTIVE',10000,5),
+('FSA05','BUSINESS',9000,6),
+('FSA05','ECONOMY',8000,7),
+('FSA06','EXECUTIVE',10000,5),
+('FSA06','BUSINESS',9000,6),
+('FSA06','ECONOMY','8000',7),
+('FSA07','EXECUTIVE',12000,6),
+('FSA07','BUSINESS',11000,7),
+('FSA07','ECONOMY',10000,8),
+('FSA08','EXECUTIVE',12000,6),
+('FSA08','BUSINESS',11000,7),
+('FSA08','ECONOMY',10000,8);
+
 
 create table service_master
 (service_code varchar(5) PRIMARY KEY,
@@ -65,36 +70,33 @@ insert into service_master values
 ('SC001','CHILDECARE',400.00),
 ('SC002','NURSING',300.00),
 ('SC003','WHEELCHAIR',350.00);
-==========================================
-Flight-Services
-FID			Varchar2(6)	FK
-Service_Code		Varchar2(5)	FK
+ 
 
 create table flight_Services
 (FID varchar(6),
 Service_code varchar(5),
-FOREIGN KEY(FID) REFERENCES flight(FID),
-FOREIGN KEY(SERVICE_CODE) REFERENCES SERVICE_MASTER(service_code));
+FOREIGN KEY(FID) REFERENCES flight(FID) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(SERVICE_CODE) REFERENCES SERVICE_MASTER(service_code) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into Flight_Services values
-('FSA001','SC001'),
-('FSA001','SC002'),
-('FSA002','SC001'),
-('FSA002','SC002'),
-('FSA003','SC002'),
-('FSA003','SC003'),
-('FSA004','SC002'),
-('FSA004','SC003'),
-('FSA005','SC001'),
-('FSA005','SC003'),
-('FSA006','SC001'),
-('FSA006','SC003'),
-('FSA007','SC001'),
-('FSA007','SC002'),
-('FSA008','SC001'),
-('FSA008','SC002');
+('FSA01','SC001'),
+('FSA01','SC002'),
+('FSA02','SC001'),
+('FSA02','SC002'),
+('FSA03','SC002'),
+('FSA03','SC003'),
+('FSA04','SC002'),
+('FSA04','SC003'),
+('FSA05','SC001'),
+('FSA05','SC003'),
+('FSA06','SC001'),
+('FSA06','SC003'),
+('FSA07','SC001'),
+('FSA07','SC002'),
+('FSA08','SC001'),
+('FSA08','SC002');
 
-=========================================
+
 
 create table meal_master
 (meal_code varchar(5) PRIMARY KEY,
@@ -105,43 +107,39 @@ insert into meal_master values
 ('MC001','SOUTH',250),
 ('MC002','NORTH',300),
 ('MC003','CHINESE',350);
-===========================================
+
 
 
 create table flight_meal
 (FID varchar(6),
 MEAL_CODE varchar(5),
-FOREIGN KEY(FID) REFERENCES FLIGHT(FID),
-FOREIGN KEY(MEAL_CODE) REFERENCES MEAL_MASTER(MEAL_CODE));
+FOREIGN KEY(FID) REFERENCES FLIGHT(FID) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY(MEAL_CODE) REFERENCES MEAL_MASTER(MEAL_CODE) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into flight_meal values
-('FSA001','MC001'),
-('FSA001','MC002'),
-('FSA002','MC001'),
-('FSA002','MC002'),
-('FSA003','MC002'),
-('FSA003','MC003'),
-('FSA004','MC002'),
-('FSA004','MC003'),
-('FSA005','MC001'),
-('FSA005','MC003'),
-('FSA006','MC001'),
-('FSA006','MC003'),
-('FSA007','MC001'),
-('FSA007','MC002'),
-('FSA008','MC001'),
-('FSA008','MC002');
-======================================
-Flight_Days
-FID			Varchar2(5)	FK
-Dept_time		Number(2)
-Day 			Varchar2(10)	
+('FSA01','MC001'),
+('FSA01','MC002'),
+('FSA02','MC001'),
+('FSA02','MC002'),
+('FSA03','MC002'),
+('FSA03','MC003'),
+('FSA04','MC002'),
+('FSA04','MC003'),
+('FSA05','MC001'),
+('FSA05','MC003'),
+('FSA06','MC001'),
+('FSA06','MC003'),
+('FSA07','MC001'),
+('FSA07','MC002'),
+('FSA08','MC001'),
+('FSA08','MC002');
 
+ 
 create table flight_days
 (FID varchar(6),
 day varchar(10),
 dept_time int(2),
-FOREIGN KEY(FID) REFERENCES flight(FID));
+FOREIGN KEY(FID) REFERENCES flight(FID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into flight_days values
 ('FSA01','MONDAY',11),('FSA05','MONDAY',18),('FSA06','TUESDAY',9),('FSA02','TUESDAY',23),
@@ -150,7 +148,7 @@ insert into flight_days values
 ('FSA03','TUESDAY',8),('FSA07','TUESDAY',15),('FSA08','WEDNESDAY',7),('FSA04','WEDNESDAY',23),
 ('FSA03','THURSDAY',11),('FSA07','THURSDAY',18),('FSA08','FRIDAY',9),('FSA04','FRIDAY',23),
 ('FSA03','SATURDAY',11),('FSA07','SATURDAY',18),('FSA08','SUNDAY',9),('FSA04','SUNDAY',23);
-==================================
+
 create table luggage_master
 (class varchar(10),
 weight int(3),
@@ -159,15 +157,16 @@ extra_amount_PERKG decimal(7,2));
 insert into luggage_master values
 ('EXECUTIVE',40,15),
 ('BUSINESS',35,12),
-('ECONOMY',30,10);a
-=================================================================================
+('ECONOMY',30,10);
+
+
 create table Passenger
 (PPNO varchar(10) primary key,
 Name varchar(20),
 DOB date,
 Sex varchar(6),
 Address varchar(30),
-Contact_No int(10));
+Contact_No varchar(10));
 
 insert into passenger values
 ('PPNO00001','NAME001','1985-01-01','MALE','ADDR001',9876543210),
@@ -175,7 +174,7 @@ insert into passenger values
 ('PPNO00003','NAME003','1987-03-03','MALE','ADDR003',9876543212),
 ('PPNO00004','NAME004','1988-04-04','FEMALE','ADDR004',9876543213),
 ('PPNO00005','NAME005','1989-05-05','MALE','ADDR005',9876543214);
-=================================================================================
+
 create table Ticket
 (PNRNO varchar(10) primary key,
 PPNO varchar(10),
@@ -186,10 +185,10 @@ Meal_Code varchar(5),
 Service_Code varchar(5),
 Amount float(7,2),
 Status varchar(10),
-foreign key(PPNO) references Passenger(PPNO),
-foreign key(Flight_Code) references Flight(FID),
-foreign key(Meal_Code) references Meal_Master(Meal_Code),
-foreign key(Service_Code) references Service_Master(Service_Code));
+foreign key(PPNO) references Passenger(PPNO) ON UPDATE CASCADE ON DELETE CASCADE,
+foreign key(Flight_Code) references Flight(FID) ON UPDATE CASCADE ON DELETE CASCADE,
+foreign key(Meal_Code) references Meal_Master(Meal_Code) ON UPDATE CASCADE ON DELETE CASCADE,
+foreign key(Service_Code) references Service_Master(Service_Code) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into ticket values
 ('PNRNO0001','PPNO00005','FSA01','2012-12-03','EXECUTIVE','MC002','SC002',7600,'CNF'),
@@ -201,18 +200,18 @@ insert into ticket values
 ('PNRNO0007','PPNO00002','FSA02','2012-12-06','EXECUTIVE','MC001','SC002',7650,'CNF'),
 ('PNRNO0008','PPNO00004','FSA08','2012-12-09','BUSINESS','MC002','SC002',11600,'CNF'),
 ('PNRNO0009','PPNO00003','FSA03','2012-12-08','ECONOMY','MC003','SC002',6650,'CNF');
-=================================================================================
+
 create table Passenger_Luggage_Charges
 (PNRNO varchar(10),
 Weight int(32),
 Amount float(7,2),
-foreign key(PNRNO) references Ticket(PNRNO));
+foreign key(PNRNO) references Ticket(PNRNO) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into Passenger_Luggage_Charges values
 ('PNRNO0001',70,450),
 ('PNRNO0002',60,300),
 ('PNRNO0008',65,360);
-=================================================================================
+
 create table Cancellation_Charges
 (Befor_Hours int(2),
 Charges float(7,2));
@@ -223,23 +222,23 @@ insert into cancellation_charges values
 (12,15),
 (6,25),
 (3,50);
-=================================================================================
+
 create table Cancellation
-(CID varchar(2) primary key,
+(CID varchar(5) primary key,
 PNRNO varchar(10),
 Before_Hours int(2),
-foreign key(PNRNO) references Ticket(PNRNO));
+foreign key(PNRNO) references Ticket(PNRNO) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into Cancellation values
 ('C0001','PNRNO0004',12),
 ('C0002','PNRNO0005',24);
-=================================================================================
+
 create table Availability
-(FID varchar(6),
+(Flight_Code varchar(6),
 Class varchar(10),
 Journey_Date date,
 Remaining_seats int(2),
-foreign key(Flight_Code) references Flight(FID));
+foreign key(Flight_Code) references Flight(FID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 insert into Availability values
 ('FSA01','EXECUTIVE','2012-12-03',3),
@@ -251,4 +250,4 @@ insert into Availability values
 ('FSA02','EXECUTIVE','2012-12-06',2),
 ('FSA08','BUSINESS','2012-12-09',3),
 ('FSA03','ECONOMY','2012-12-08',2);
-=================================================================================
+
